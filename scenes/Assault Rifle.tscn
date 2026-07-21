@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=4 uid="uid://c7mclp1wyfn0a"]
 
-[ext_resource type="Script" uid="uid://f5k7ok5dehqf" path="res://scripts/gun.gd" id="1_ahhp5"]
+[ext_resource type="Script" uid="uid://f5k7ok5dehqf" path="res://Scripts/gun.gd" id="1_ahhp5"]
 [ext_resource type="AudioStream" uid="uid://cxytkxxwtn37q" path="res://Sound/reload_02.ogg" id="2_63m64"]
 [ext_resource type="AudioStream" uid="uid://dg1mp0ib34git" path="res://Sound/gunempty_05.ogg" id="3_ljy54"]
 

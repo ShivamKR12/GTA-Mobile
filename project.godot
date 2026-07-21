@@ -15,10 +15,6 @@ run/main_scene="uid://cx6twok4irwsu"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
-[autoload]
-
-GlobalCelestials="*res://addons/time-of-day/src/sky/celestials/tod_global_celestials.gd"
-
 [display]
 
 window/size/mode=3
@@ -28,7 +24,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/scene_texture/plugin.cfg", "res://addons/time-of-day/plugin.cfg", "res://addons/virtual_joystick/plugin.cfg")
+enabled=PackedStringArray("res://addons/scene_texture/plugin.cfg", "res://addons/virtual_joystick/plugin.cfg")
 
 [global_group]
 

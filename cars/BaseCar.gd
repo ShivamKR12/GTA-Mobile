@@ -1,9 +1,9 @@
 extends VehicleBody3D
 
-@export var STEER_SPEED = 1.5
+@export var STEER_SPEED = 3.0
 @export var STEER_LIMIT = 0.6
 var steer_target = 0
-@export var engine_force_value = 40
+@export var engine_force_value = 80.0
 
 @onready var camera = $look/Camera3D
 @onready var player_exit = $"Player Exit"
@@ -18,11 +18,12 @@ func _physics_process(delta):
 	if not has_player:
 		return
 
-	var speed = linear_velocity.length() * Engine.get_frames_per_second() * delta
-	traction(speed)
-	$Hud/speed.text = str(round(speed * 3.8)) + "  KMPH"
+	var speed_mps = linear_velocity.length()
+	traction(speed_mps)
+	$Hud/speed.text = str(round(speed_mps * 3.6)) + "  KMPH"
 
-	var fwd_mps = transform.basis.x.x
+	var forward_dir = -global_transform.basis.z
+	var fwd_mps = linear_velocity.dot(forward_dir)
 	
 	var joystick_active := false
 
@@ -43,7 +44,10 @@ func _physics_process(delta):
 		# Keyboard steering
 		steer_input = Input.get_action_strength("move_left") - Input.get_action_strength("move_right")
 
-	steer_target = steer_input * STEER_LIMIT
+	# Less steering at higher speeds for stability
+	var speed_factor = clamp(speed_mps / 30.0, 0.0, 1.0)
+	var current_steer_limit = lerp(STEER_LIMIT, STEER_LIMIT * 0.3, speed_factor)
+	steer_target = steer_input * current_steer_limit
 
 	# --- ENGINE / BRAKE ---
 	var forward_input := 0.0
@@ -56,37 +60,44 @@ func _physics_process(delta):
 		forward_input = Input.get_action_strength("move_backward") - Input.get_action_strength("move_forward")
 
 	# forward_input meaning:
-	# > 0 = reverse
+	# > 0 = reverse / brake
 	# < 0 = forward
+
+	engine_force = 0.0
+	brake = 0.0
 
 
 	# --- APPLY VEHICLE FORCE ---
-	if forward_input > 0:
-		# reverse
-		if speed < 20 and speed != 0:
-			engine_force = clamp(engine_force_value * 3 / speed, 0, 300)
-		else:
-			engine_force = engine_force_value
-		brake = 0.0
-
-	elif forward_input < 0:
+	if forward_input < 0:
 		# forward
-		if fwd_mps >= -1:
-			if speed < 30 and speed != 0:
-				engine_force = -clamp(engine_force_value * 10 / speed, 0, 300)
+		if fwd_mps < -1.0: # Moving backwards, apply brakes
+			brake = 5.0
+		else:
+			if speed_mps < 10.0:
+				engine_force = -engine_force_value * 2.5
+			elif speed_mps < 25.0:
+				engine_force = -engine_force_value * 1.5
 			else:
 				engine_force = -engine_force_value
+
+	elif forward_input > 0:
+		# reverse / brake
+		if fwd_mps > 1.0: # Moving forwards, apply brakes
+			brake = 5.0
 		else:
-			brake = 1
+			if speed_mps < 10.0:
+				engine_force = engine_force_value * 1.5
+			else:
+				engine_force = engine_force_value
 
 	else:
-		# no input
-		engine_force = 0
-		brake = 0.0
+		# Auto slow-down when no input
+		if speed_mps > 0.5:
+			brake = 1.0
 
 	# --- Handbrake / walking slowdown ---
 	if Input.is_action_pressed("walk"):
-		brake = 3
+		brake = 10
 		$wheal2.wheel_friction_slip = 0.8
 		$wheal3.wheel_friction_slip = 0.8
 	else:
@@ -96,4 +107,5 @@ func _physics_process(delta):
 	steering = move_toward(steering, steer_target, STEER_SPEED * delta)
 
 func traction(speed):
-	apply_central_force(Vector3.DOWN*speed)
+	# Add artificial downforce to make the car stick to the road (GTA-style)
+	apply_central_force(Vector3.DOWN * speed * 2.0)

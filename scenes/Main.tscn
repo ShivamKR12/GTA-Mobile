@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://dyxgoc7h6ixrl"]
+[gd_scene load_steps=47 format=3 uid="uid://dyxgoc7h6ixrl"]
 
 [ext_resource type="PackedScene" uid="uid://ctj7wi5gv0h04" path="res://scenes/Player.tscn" id="1_gdcyb"]
 [ext_resource type="PackedScene" uid="uid://cowourfbft3bk" path="res://City/building_A.gltf" id="2_oa6sj"]
@@ -40,8 +40,7 @@
 [ext_resource type="Texture2D" uid="uid://c31scdlu165yt" path="res://Textures/palette7.png" id="37_x1gp3"]
 [ext_resource type="Texture2D" uid="uid://w7db6wcnnm2i" path="res://Textures/palette8.png" id="38_le2d2"]
 [ext_resource type="Texture2D" uid="uid://dq1mw01foaave" path="res://Textures/palette9.png" id="39_gexia"]
-[ext_resource type="PackedScene" uid="uid://s0jb6pj6elne" path="res://City/car_hatchback.gltf" id="41_5grtr"]
-[ext_resource type="PackedScene" uid="uid://c8oebfuh0hadl" path="res://City/car_sedan.gltf" id="42_vua0o"]
+[ext_resource type="Script" uid="uid://xgnuemjssl2j" path="res://Scripts/simple_day_night.gd" id="99_daynight"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_cmqll"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -70,6 +69,7 @@ region_min_size = 100.0
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_g3eip"]
 
 [node name="Main" type="Node3D"]
+script = ExtResource("99_daynight")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.606004, -0.755155, 0.250001, -0.208838, 0.454296, 0.866027, -0.767558, 0.472606, -0.43301, -60.204, 47.7168, 60.6752)
@@ -393,11 +393,11 @@ engine_force_value = 80.0
 script = ExtResource("30_rsknx")
 textures = Array[Texture2D]([ExtResource("31_gia1l"), ExtResource("32_aw8hi"), ExtResource("33_cm7k6"), ExtResource("34_csfbn"), ExtResource("35_sj5fg"), ExtResource("36_1xgkc"), ExtResource("37_x1gp3"), ExtResource("38_le2d2"), ExtResource("39_gexia")])
 
-[node name="car_hatchback2" parent="." instance=ExtResource("41_5grtr")]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -2.82983, 0.723235, 12.0433)
+[node name="car_hatchback2" parent="." instance=ExtResource("28_qd1pt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.82983, 0.723235, 12.0433)
 
-[node name="car_sedan2" parent="." instance=ExtResource("42_vua0o")]
-transform = Transform3D(0.155135, 0, 4.99759, 0, 5, 0, -4.99759, 0, 0.155135, -10.2786, 0.916916, 12.6488)
+[node name="car_sedan2" parent="." instance=ExtResource("27_ugmlg")]
+transform = Transform3D(0.031027, 0, 0.999518, 0, 1, 0, -0.999518, 0, 0.031027, -10.2786, 0.916916, 12.6488)
 
 [node name="World Borders" type="StaticBody3D" parent="."]
 

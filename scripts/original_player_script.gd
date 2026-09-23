@@ -192,12 +192,12 @@ func buy_weapon(weapon_name:String):
 	weapon_count += 1
 	purchases.append(weapon_name)
 
-func _on_car_detector_body_shape_entered(body_rid: RID, body: Node3D, body_shape_index: int, local_shape_index: int) -> void:
+func _on_car_detector_body_shape_entered(_body_rid: RID, body: Node3D, _body_shape_index: int, _local_shape_index: int) -> void:
 	if driving_car: return
 	detected_car = body
 	ui.car_indicator.show()
 
-func _on_car_detector_body_shape_exited(body_rid: RID, body: Node3D, body_shape_index: int, local_shape_index: int) -> void:
+func _on_car_detector_body_shape_exited(_body_rid: RID, _body: Node3D, _body_shape_index: int, _local_shape_index: int) -> void:
 	if driving_car: return
 	detected_car = null
 	ui.car_indicator.hide()

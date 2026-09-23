@@ -111,7 +111,7 @@ group_uniforms settings;
 	}
 	// Params can be change in the same way as in noise settings in Godot
 	const float FRACTAL_BOUNDING = 1.0 / 1.75;
-	const int OCTAVES = 5;
+	const int OCTAVES = 1;
 	const float PING_PONG_STRENGTH = 2.0;
 	const float WEIGHTED_STRENGTH = 0.0;
 	const float GAIN = 0.5;

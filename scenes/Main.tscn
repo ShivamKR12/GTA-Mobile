@@ -1,8 +1,9 @@
-[gd_scene load_steps=47 format=3 uid="uid://dyxgoc7h6ixrl"]
+[gd_scene load_steps=48 format=3 uid="uid://dyxgoc7h6ixrl"]
 
 [ext_resource type="PackedScene" uid="uid://ctj7wi5gv0h04" path="res://scenes/Player.tscn" id="1_gdcyb"]
 [ext_resource type="PackedScene" uid="uid://cowourfbft3bk" path="res://City/building_A.gltf" id="2_oa6sj"]
 [ext_resource type="PackedScene" uid="uid://bx22wep5br8s1" path="res://City/building_B.gltf" id="3_0f1tp"]
+[ext_resource type="ArrayOccluder3D" uid="uid://c175ygdbl1civ" path="res://scenes/Main.occ" id="3_pdwbg"]
 [ext_resource type="PackedScene" uid="uid://fo8qtape43ah" path="res://City/building_C.gltf" id="4_0qimb"]
 [ext_resource type="PackedScene" uid="uid://fckckixguqxx" path="res://City/building_D.gltf" id="5_in2eo"]
 [ext_resource type="PackedScene" uid="uid://ctmumoaxdf666" path="res://City/building_E.gltf" id="6_dyyw8"]
@@ -85,6 +86,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.768154, 8.3609)
 [node name="City Holder" type="NavigationRegion3D" parent="."]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 navigation_mesh = SubResource("NavigationMesh_pdwbg")
+
+[node name="OccluderInstance3D" type="OccluderInstance3D" parent="City Holder"]
+occluder = ExtResource("3_pdwbg")
 
 [node name="base2" parent="City Holder" instance=ExtResource("10_pb578")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 4)

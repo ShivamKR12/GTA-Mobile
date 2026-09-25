@@ -104,10 +104,15 @@ quit={
 ]
 }
 
+[autoload]
+
+GlobalSettings="*res://Scripts/global_settings.gd"
+
 [rendering]
 
 renderer/rendering_method="mobile"
 textures/vram_compression/import_etc2_astc=true
+occlusion_culling/use_occlusion_culling=true
 
 [shader_globals]
 

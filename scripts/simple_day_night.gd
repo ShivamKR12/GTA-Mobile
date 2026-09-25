@@ -38,32 +38,46 @@ func _ready():
 			
 	if env and env.environment:
 		var new_sky = Sky.new()
-		var mat = ShaderMaterial.new()
-		mat.shader = load("res://sky.gdshader")
 		
-		# Set shader params to replicate the nice stylized sky
-		mat.set_shader_parameter("day_top_color", Color(0.1, 0.6, 1.0))
-		mat.set_shader_parameter("day_bottom_color", Color(0.4, 0.8, 1.0))
-		mat.set_shader_parameter("sunset_top_color", Color(0.7, 0.75, 1.0))
-		mat.set_shader_parameter("sunset_bottom_color", Color(1.0, 0.5, 0.7))
-		mat.set_shader_parameter("night_top_color", Color(0.02, 0.0, 0.04))
-		mat.set_shader_parameter("night_bottom_color", Color(0.1, 0.0, 0.2))
-		mat.set_shader_parameter("horizon_color", Color(0.0, 0.7, 0.8))
-		mat.set_shader_parameter("horizon_blur", 0.5)
-		mat.set_shader_parameter("sun_color", Color(10.0, 8.0, 1.0))
-		mat.set_shader_parameter("sun_sunset_color", Color(10.0, 0.0, 0.0))
-		mat.set_shader_parameter("moon_color", Color(1.0, 0.95, 0.7))
-		mat.set_shader_parameter("clouds_speed", 2.0)
-		mat.set_shader_parameter("clouds_scale", 3.0)
-		mat.set_shader_parameter("clouds_cutoff", 0.3)
-		mat.set_shader_parameter("clouds_fuzziness", 0.5)
-		mat.set_shader_parameter("stars_texture", load("res://Textures/stars.png"))
-		mat.set_shader_parameter("stars_speed", 1.0)
-		
-		new_sky.sky_material = mat
+		if get_node("/root/GlobalSettings").use_sky_shader:
+			var mat = ShaderMaterial.new()
+			mat.shader = load("res://sky.gdshader")
+			# Set shader params to replicate the nice stylized sky
+			mat.set_shader_parameter("day_top_color", Color(0.1, 0.6, 1.0))
+			mat.set_shader_parameter("day_bottom_color", Color(0.4, 0.8, 1.0))
+			mat.set_shader_parameter("sunset_top_color", Color(0.7, 0.75, 1.0))
+			mat.set_shader_parameter("sunset_bottom_color", Color(1.0, 0.5, 0.7))
+			mat.set_shader_parameter("night_top_color", Color(0.02, 0.0, 0.04))
+			mat.set_shader_parameter("night_bottom_color", Color(0.1, 0.0, 0.2))
+			mat.set_shader_parameter("horizon_color", Color(0.0, 0.7, 0.8))
+			mat.set_shader_parameter("horizon_blur", 0.5)
+			mat.set_shader_parameter("sun_color", Color(10.0, 8.0, 1.0))
+			mat.set_shader_parameter("sun_sunset_color", Color(10.0, 0.0, 0.0))
+			mat.set_shader_parameter("moon_color", Color(1.0, 0.95, 0.7))
+			mat.set_shader_parameter("clouds_speed", 2.0)
+			mat.set_shader_parameter("clouds_scale", 3.0)
+			mat.set_shader_parameter("clouds_cutoff", 0.3)
+			mat.set_shader_parameter("clouds_fuzziness", 0.5)
+			mat.set_shader_parameter("stars_texture", load("res://Textures/stars.png"))
+			mat.set_shader_parameter("stars_speed", 1.0)
+			new_sky.sky_material = mat
+		else:
+			var mat = ProceduralSkyMaterial.new()
+			mat.sky_top_color = Color(0.1, 0.6, 1.0)
+			mat.sky_horizon_color = Color(0.4, 0.8, 1.0)
+			mat.ground_bottom_color = Color(0.1, 0.1, 0.1)
+			mat.ground_horizon_color = Color(0.4, 0.8, 1.0)
+			new_sky.sky_material = mat
+			
 		env.environment.sky = new_sky
 		env.environment.background_mode = Environment.BG_SKY
 		env.environment.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
+
+	# Apply shadow settings
+	if sun:
+		sun.shadow_enabled = get_node("/root/GlobalSettings").shadows_enabled
+	if moon:
+		moon.shadow_enabled = get_node("/root/GlobalSettings").shadows_enabled
 
 func _process(delta: float) -> void:
 	if not sun or not moon or not env or not env.environment: return

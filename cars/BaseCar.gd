@@ -8,11 +8,19 @@ var steer_target = 0
 @onready var camera = $look/Camera3D
 @onready var player_exit = $"Player Exit"
 var has_player := false
+var cached_ui = null
 
 func toggle_player():
 	has_player = !has_player
 	camera.current = has_player
 	$Hud.visible = has_player
+	if has_player:
+		if get_tree().has_group("Player"):
+			var p = get_tree().get_first_node_in_group("Player")
+			if p:
+				cached_ui = p.ui
+	else:
+		cached_ui = null
 
 func _physics_process(delta):
 	if not has_player:
@@ -28,7 +36,7 @@ func _physics_process(delta):
 	var joystick_active := false
 
 	# var touch_enabled = DisplayServer.is_touchscreen_available()
-	var ui = get_tree().get_first_node_in_group("Player").ui if get_tree().has_group("Player") else null
+	var ui = cached_ui
 
 	if ui and ui.joystick:
 		if ui.joystick.output.length() > 0.05:  # A small deadzone

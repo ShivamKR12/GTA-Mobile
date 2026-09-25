@@ -22,6 +22,7 @@ var texture:Texture2D
 @export var attack_range := 2.0
 @export var attack_cooldown := 1.2
 var attack_timer := 0.0
+var path_update_timer := 0.0
 var player: CharacterBody3D = null
 var chase := false
 var animation_attacking := false
@@ -79,6 +80,12 @@ func _physics_process(delta):
 	
 	# If chasing player, update target to player
 	if player and chase:
+		# Update path target intermittently to save CPU
+		path_update_timer -= delta
+		if path_update_timer <= 0:
+			path_update_timer = 0.25
+			set_movement_target(player.global_transform.origin)
+			
 		# Move faster if chasing
 		var movement_speed = chase_speed
 		var next_path_position: Vector3 = navigation_agent.get_next_path_position()
@@ -89,7 +96,6 @@ func _physics_process(delta):
 		else:
 			_on_velocity_computed(new_velocity)
 		
-		set_movement_target(player.global_transform.origin)
 		animation_tree.set("parameters/Movement/transition_request", "Run")
 		# Attack if close enough and cooldown passed
 		var dist = position.distance_to(player.position)

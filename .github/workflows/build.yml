@@ -26,8 +26,20 @@ jobs:
           relative_project_path: ./
           archive_output: true
 
-      - name: Upload Artifacts
+      - name: Upload Pipeline Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Game-Executables
           path: ${{ steps.export.outputs.archive_directory }}/*
+          
+      - name: Publish to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        # Only publish releases on commits to main/master, not on PRs
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: "Development Build #${{ github.run_number }}"
+          body: "Automated build of the latest commit."
+          files: ${{ steps.export.outputs.archive_directory }}/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,33 @@
+name: Build Godot Executables
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  export_game:
+    runs-on: ubuntu-latest
+    name: Export Game
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Godot Export
+        id: export
+        uses: firebelley/godot-export@v5.2.1
+        with:
+          # Match the exact Godot version you are using
+          godot_executable_download_url: https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_linux.x86_64.zip
+          godot_export_templates_download_url: https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_export_templates.tpz
+          relative_project_path: ./
+          archive_output: true
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Game-Executables
+          path: ${{ steps.export.outputs.archive_directory }}/*

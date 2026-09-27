@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_dvlvu")
-money = 0
-position = Vector3(29.6743, -100, 6.42739)
+money = 228
+position = Vector3(43.195, 0.759065, 38.6053)
 purchases = Array[String]([])

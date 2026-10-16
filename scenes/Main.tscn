@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://dyxgoc7h6ixrl"]
+[gd_scene load_steps=49 format=3 uid="uid://dyxgoc7h6ixrl"]
 
 [ext_resource type="PackedScene" uid="uid://ctj7wi5gv0h04" path="res://scenes/Player.tscn" id="1_gdcyb"]
 [ext_resource type="PackedScene" uid="uid://cowourfbft3bk" path="res://City/building_A.gltf" id="2_oa6sj"]
@@ -42,6 +42,7 @@
 [ext_resource type="Texture2D" uid="uid://w7db6wcnnm2i" path="res://Textures/palette8.png" id="38_le2d2"]
 [ext_resource type="Texture2D" uid="uid://dq1mw01foaave" path="res://Textures/palette9.png" id="39_gexia"]
 [ext_resource type="Script" uid="uid://xgnuemjssl2j" path="res://Scripts/simple_day_night.gd" id="99_daynight"]
+[ext_resource type="PackedScene" path="res://scenes/fade_transition.tscn" id="99_fade"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_cmqll"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -424,3 +425,6 @@ shape = SubResource("WorldBoundaryShape3D_g3eip")
 [node name="CollisionShape3D5" type="CollisionShape3D" parent="World Borders"]
 transform = Transform3D(1.91069e-15, 4.37114e-08, -1, 1, -4.37114e-08, 0, -4.37114e-08, -1, -4.37114e-08, -4.37114e-07, 4.37114e-07, 55)
 shape = SubResource("WorldBoundaryShape3D_g3eip")
+
+[node name="FadeTransition" parent="." instance=ExtResource("99_fade")]
+visible = false

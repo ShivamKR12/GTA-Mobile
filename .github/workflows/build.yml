@@ -1,8 +1,12 @@
 name: Build Godot Executables
 
 on:
-  # Allows you to run this workflow manually from the Actions tab
+  push:
+    branches: [ master ]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   export_game:
@@ -12,13 +16,21 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Generate Android Debug Keystore
+      - name: Generate Android Keystores
         run: |
-          keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android -keystore debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999
+          keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android -keystore release.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999
+          cp release.keystore debug.keystore
 
       - name: Godot Export
         id: export
         uses: firebelley/godot-export@v5.2.1
+        env:
+          GODOT_ANDROID_KEYSTORE_DEBUG_PATH: ${{ github.workspace }}/debug.keystore
+          GODOT_ANDROID_KEYSTORE_DEBUG_USER: androiddebugkey
+          GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD: android
+          GODOT_ANDROID_KEYSTORE_RELEASE_PATH: ${{ github.workspace }}/release.keystore
+          GODOT_ANDROID_KEYSTORE_RELEASE_USER: androiddebugkey
+          GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD: android
         with:
           # Match the exact Godot version you are using
           godot_executable_download_url: https://github.com/godotengine/godot/releases/download/4.4.1-stable/Godot_v4.4.1-stable_linux.x86_64.zip
@@ -34,7 +46,6 @@ jobs:
           
       - name: Publish to GitHub Releases
         uses: softprops/action-gh-release@v2
-        # Only publish releases on commits to main/master, not on PRs
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         with:
           tag_name: build-${{ github.run_number }}

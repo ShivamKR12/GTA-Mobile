@@ -13,7 +13,7 @@ config_version=5
 config/name="GTA-Mobile"
 run/main_scene="uid://cx6twok4irwsu"
 config/features=PackedStringArray("4.4", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://da2epptjksf4j"
 
 [autoload]
 

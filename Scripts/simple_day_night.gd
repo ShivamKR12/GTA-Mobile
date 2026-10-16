@@ -9,6 +9,9 @@ var moon : DirectionalLight3D = null
 @onready var env : WorldEnvironment = null
 
 func _ready():
+	if has_node("FadeTransition"):
+		$FadeTransition.visible = true
+		$FadeTransition/AnimationPlayer.play("fade_out")
 	# Start at roughly 12:00 PM (Noon) so it's bright immediately
 	time_passed = day_length_seconds * 0.5 
 	
